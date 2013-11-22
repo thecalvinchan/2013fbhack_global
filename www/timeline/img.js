@@ -9,12 +9,13 @@ window.onload=function() {
   console.log(obj);
   for (var stack in obj) {
     console.log(obj[stack]);
-    var stackstack = document.createElement('div')
+    var stackstack = document.createElement('div');
     stackstack.setAttribute('class', 'stack-stack');
-    var crop = document.createElement('div')
+    var crop = document.createElement('div');
     crop.setAttribute('class', 'crop');
-    var img = document.createElement('img')
-    img.setAttribute('src', "http://54.201.41.99/"+obj[stack].pictures[0]);
+    var img = document.createElement('img');
+    var url = obj[stack].pictures[0];
+    img.setAttribute('src', "http://54.201.41.99"+url.substring(8, url.length ));
     crop.appendChild(img);
     var fn = document.createElement('h5');
     

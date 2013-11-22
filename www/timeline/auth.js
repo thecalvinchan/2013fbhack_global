@@ -10,13 +10,19 @@ window.fbAsyncInit = function() {
   FB.getLoginStatus(function(response) {
     if (response.status === 'connected') {
       FB.api('/me', function(response) {
-        window.document.title = response.name + "\'s Timeline";
+        var txt = response.name + '\'s New Acquaintances';
+        window.document.title = txt;
+        document.getElementById('header-title').innerHTML=txt;
       });
       FB.api('/me/picture?type=large', function(response) {
         console.log(response);
+        var i = document.createElement('img');
+        i.src = response.data.url;
+        document.getElementById('header-image').appendChild(i);  
       });
     } else {
       console.log('failed');
+      window.location = "../index.html";
     }
   });
 };
