@@ -13,12 +13,12 @@ import android.util.Log;
 import com.google.android.glass.timeline.LiveCard;
 import com.google.android.glass.timeline.TimelineManager;
 
-public class MemoService extends Service {
-	private static final String LIVE_CARD_ID = "memo";
+public class IdentifyService extends Service {
+	private static final String LIVE_CARD_ID = "identify";
 
 	private TimelineManager mTimelineManager;
-	private LiveCard mLiveCard;
-	private TextToSpeech mSpeech;
+  private LiveCard mLiveCard;
+  private TextToSpeech mSpeech;
 
 	@Override
 	public void onCreate() {

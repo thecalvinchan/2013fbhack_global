@@ -9,8 +9,10 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 
+import com.fbhack.memoapp.R;
 
-public class MenuActivity extends Activity {
+
+public class IdentifyActivity extends Activity {
 	
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -33,8 +35,8 @@ public class MenuActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.v("Memo", "ONCREATE");
-		bindService(new Intent(this, MemoService.class), mConnection, 0);
+		Log.v("Identify", "ONCREATE");
+		bindService(new Intent(this, IdentifyService.class), mConnection, 0);
 		setContentView(R.layout.activity_menu);
 	}
 	
