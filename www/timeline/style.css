@@ -1,0 +1,161 @@
+/* --- RESET --- */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+body {
+  background-color: #e5e5e5;
+  font-family: 'Varela', sans-serif;
+}
+
+#header {
+  background-color: #3e3e3e;
+  width: 100%;
+  height: 250px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+#header:before {
+  content: "";
+  position: absolute;
+  background: url('../img/faces.jpg');
+  background-repeat: repeat;
+  background-color: #3e3e3e;
+  z-index: 0;
+  width: 100%;
+  height: 90%;
+  -webkit-filter: blur(10px);
+}
+
+.row {
+  width: 960px;
+  margin: 0 auto;
+}
+
+#header-image {
+  background-color: #e5e5e5;
+  width: 150px;
+  height: 150px;
+  position: relative;
+  left: 40px;
+  top: 120px;
+  z-index: 2;
+  box-shadow: 0 0 0 1px #bdbdbd, 
+              0 0 0 15px #fff,
+              0 0 0 16px #bdbdbd;
+}
+
+#header h3 {
+  color: #fff;
+  position: relative;
+  left: 220px;
+  top: 50px;
+  font-size: 20pt;
+}
+
+#stacks {
+  width: 980px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 40px 0 40px 0;
+  position: relative;
+  top: 250px;
+  border: 1px solid #bdbdbd;
+}
+
+.stack-row h4 {
+  text-align: right;
+  position: relative;
+  top: 20px;
+  right: 35px;
+}
+
+.stack-row {
+  background-color: #fff;
+  position: relative;
+  overflow: hidden;
+  padding: 0 0 20px 0;
+}
+
+.stack-stack {
+  position: relative;
+  background-color: #e5e5e5;
+  width: 150px;
+  height: 150px;
+  float: left;
+  margin: 72px 0px 20px 72px;
+  box-shadow: 0 0 0 1px #bdbdbd,
+              0 0 0 15px #fff,
+              0 0 0 16px #bdbdbd;
+}
+
+.stack-stack h5 {
+  text-align: center;
+  position: relative;
+  top: 0px;
+  font-size: 15pt;
+}
+
+.stack-stack img {
+  clip: rect(0px, 150px, 150px, 0px);
+}
+
+.multiple {
+  bottom: 6px;
+  box-shadow: 0 0 0 1px #bdbdbd,
+              0 0 0 15px #fff,
+              0 0 0 16px #bdbdbd,
+              0 2px 0 15px #fff,
+              0 2px 0 16px #bdbdbd,
+              0 4px 0 15px #fff,
+              0 4px 0 16px #bdbdbd,
+              0 6px 0 15px #fff,
+              0 6px 0 16px #bdbdbd;
+}
+
+.multiple h5 {
+  top: 26px;
+}
