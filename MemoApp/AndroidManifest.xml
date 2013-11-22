@@ -25,6 +25,8 @@
             </intent-filter>
             <meta-data android:name="com.google.android.glass.VoiceTrigger"
             android:resource="@xml/remember_voice_trigger" />
+            <meta-data android:name="com.google.android.glass.VoiceTrigger"
+            android:resource="@xml/identify_voice_trigger" />
             
         </activity>
     </application>
