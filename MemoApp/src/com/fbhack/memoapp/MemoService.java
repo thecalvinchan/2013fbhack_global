@@ -1,12 +1,9 @@
 package com.fbhack.memoapp;
 
-import java.util.ArrayList;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
@@ -22,16 +19,9 @@ public class MemoService extends Service {
 
 	@Override
 	public void onCreate() {
+    Log.e("Memopublius", "onCreate");
 		super.onCreate();
-		Log.v("MEMO", "SANITY");
 		mTimelineManager = TimelineManager.from(this);
-
-		mSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-			@Override
-			public void onInit(int status) {
-				// Do nothing.
-			}
-		});
 	}
 
 	@Override
@@ -41,6 +31,11 @@ public class MemoService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+    /*
+    ArrayList<String> voiceResults = intent.getExtras()
+      .getStringArrayList(RecognizerIntent.EXTRA_RESULTS);
+      */
+    Log.e("Memopublius", "onStartCommand");
 		if (mLiveCard == null) {
 			mLiveCard = mTimelineManager.getLiveCard(LIVE_CARD_ID);
 

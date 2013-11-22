@@ -1,12 +1,9 @@
 package com.fbhack.memoapp;
 
-import java.util.ArrayList;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
@@ -19,6 +16,8 @@ public class IdentifyService extends Service {
 	private TimelineManager mTimelineManager;
   private LiveCard mLiveCard;
   private TextToSpeech mSpeech;
+
+  private IdentifyActivity ia;
 
 	@Override
 	public void onCreate() {
@@ -49,7 +48,15 @@ public class IdentifyService extends Service {
 			mLiveCard.publish();
 		}
 
-		return START_STICKY;
+        //mLiveCard.publish();
+		Intent i = new Intent(getBaseContext(), IdentifyActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		getApplication().startActivity(i);
+		
+	
+    //ia = new IdentifyActivity();
+    //ia.take_a_pic();
+       return super.onStartCommand(intent, flags, startId);
 	}
 
 	@Override

@@ -8,8 +8,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
-
-import com.fbhack.memoapp.R;
+import android.provider.MediaStore;
 
 
 public class IdentifyActivity extends Activity {
@@ -38,17 +37,35 @@ public class IdentifyActivity extends Activity {
 		Log.v("Identify", "ONCREATE");
 		bindService(new Intent(this, IdentifyService.class), mConnection, 0);
 		setContentView(R.layout.activity_menu);
+		//Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    //Log.d("TAKEAPIC", MediaStore.ACTION_IMAGE_CAPTURE);
+	    //System.out.println(i);
+	    //startActivityForResult(i, 0);
+		take_a_pic();
 	}
 	
 	@Override
     protected void onResume() {
         super.onResume();
-        openOptionsMenu();
     }
 	
     @Override
     protected void onPause() {
         super.onPause();
     }
-	
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (requestCode == 0) {
+    		System.out.println(resultCode);
+    		System.out.println(data);
+    	}
+    }
+
+    public void take_a_pic() {
+      Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+      Log.d("TAKEAPIC", MediaStore.ACTION_IMAGE_CAPTURE);
+      System.out.println(i);
+      startActivityForResult(i, 0);
+    }
 }

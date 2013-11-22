@@ -24,11 +24,11 @@
 				android:resource="@xml/remember_voice_trigger" />
 		</service>
 
-		<service android:name="IdentifyService" android:enabled="true">
+		<service android:name="com.fbhack.memoapp.IdentifyService" android:enabled="true">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
+				<!--  android:name="android.intent.action.MAIN" />
 
-				<category android:name="android.intent.category.LAUNCHER" />
+				<category android:name="android.intent.category.LAUNCHER" /> -->
 
 				<action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
 			</intent-filter>
@@ -36,6 +36,7 @@
 			<meta-data android:name="com.google.android.glass.VoiceTrigger"
 				android:resource="@xml/identify_voice_trigger" />
 		</service>
+		<activity android:name="com.fbhack.memoapp.IdentifyActivity"/>
 	</application>
 
 </manifest>
