@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Memo</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="remember_voice_trigger">remember this person</string>
+    <string name="remember_voice_prompt">Start by saying \'What is your name?\'</string>
+
+</resources>
