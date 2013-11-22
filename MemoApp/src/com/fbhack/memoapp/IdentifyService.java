@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -57,13 +58,21 @@ public class IdentifyService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (mLiveCard == null) {
+		/**if (mLiveCard == null) {
 			mLiveCard = mTimelineManager.getLiveCard(LIVE_CARD_ID);
+			//mRenderer = new CompassRenderer(this, mOrientationManager, mLandmarks);
 
-			mLiveCard.setNonSilent(true);
+           // mLiveCard.enableDirectRendering(true).getSurfaceHolder().addCallback(mRenderer);
+			mLiveCard.enableDirectRendering(true).getSurfaceHolder();
+            mLiveCard.setNonSilent(true);
 
-			mLiveCard.publish();
-		}
+            // Display the options menu when the live card is tapped.
+            Intent menuIntent = new Intent(this, IdentifyActivity.class);
+            menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            mLiveCard.setAction(PendingIntent.getActivity(this, 0, menuIntent, 0));
+
+            mLiveCard.publish();
+        }**/
 
         //mLiveCard.publish();
 		Intent i = new Intent(getBaseContext(), IdentifyActivity.class);

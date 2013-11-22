@@ -1,9 +1,13 @@
 package com.fbhack.memoapp;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +15,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -19,9 +24,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import com.google.android.glass.app.Card;
 import com.google.android.glass.media.Camera;
+import com.google.android.glass.timeline.LiveCard;
+import com.google.android.glass.timeline.TimelineManager;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -34,10 +43,14 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.RemoteViews;
 
 public class IdentifyActivity extends Activity {
 	
     private String mEncodedImage;
+    private LiveCard mLiveCard;
+    private TimelineManager mTimelineManager;
+    private static final String LIVE_CARD_ID = "identify";
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@Override
@@ -85,18 +98,70 @@ public class IdentifyActivity extends Activity {
     	return;
     }
     
-    private class ImageSender extends AsyncTask<Void, Void, Void> {
 
+    private class ImageSender extends AsyncTask<Void, Void, String> {
+    	
         @Override
-        public Void doInBackground(Void... voids) {
-            String initURL = "http://54.201.41.99/process/recognize/";
+        public String doInBackground(Void... voids) {
+        	HttpClient httpclient = new DefaultHttpClient();
+        	HttpPost httppost = new HttpPost("http://54.201.41.99/process/recognize/");
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("picture", mEncodedImage));
             nameValuePairs.add(new BasicNameValuePair("user", "1234"));
+            try {
+				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            HttpResponse response = null;
+			try {
+				response = httpclient.execute(httppost);
+				System.out.println(response);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream instream = null;
+				try {
+					instream = entity.getContent();
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	            BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
+	            StringBuilder sb = new StringBuilder();
+	            String line = null;
+                try {
+                	System.out.println(entity);
+                	while ((line = reader.readLine()) != null) {
+                		sb.append((line + "\n"));
+                	}
+                } catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+                    try {
+						instream.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
+	            return sb.toString();
+            }
             /*
             HttpPost to_http = new HttpPost(initURL);
             MultipartEntity entity = new MultipartEntity();
-            */
+           
             
             HttpEntity result = httpPost(initURL, nameValuePairs).getEntity();
             try {
@@ -107,10 +172,19 @@ public class IdentifyActivity extends Activity {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} */
             return null;
         }
+        
+        @Override
+        protected void onPostExecute(String result) {
+        	System.out.println(result);
+        	Card card = new Card(null);
+        	card.setText(result);
+        	card.toView();
+        }
     }
+    
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -168,7 +242,7 @@ public class IdentifyActivity extends Activity {
 				byte[] image_arr = baos.toByteArray();
 				mEncodedImage = Base64.encodeToString(image_arr, Base64.DEFAULT);
 				ImageSender is = new ImageSender();
-				is.doInBackground();
+				is.execute();
 			}
 		}
 	}
