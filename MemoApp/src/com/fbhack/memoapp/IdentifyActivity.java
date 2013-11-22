@@ -3,7 +3,6 @@ package com.fbhack.memoapp;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,7 +13,6 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -22,16 +20,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
-import com.google.android.glass.app.Card;
-import com.google.android.glass.media.Camera;
-import com.google.android.glass.timeline.LiveCard;
-import com.google.android.glass.timeline.TimelineManager;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -43,7 +35,13 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.RemoteViews;
+import android.view.View;
+import android.widget.TextView;
+
+import com.google.android.glass.app.Card;
+import com.google.android.glass.media.Camera;
+import com.google.android.glass.timeline.LiveCard;
+import com.google.android.glass.timeline.TimelineManager;
 
 public class IdentifyActivity extends Activity {
 	
@@ -51,6 +49,8 @@ public class IdentifyActivity extends Activity {
     private LiveCard mLiveCard;
     private TimelineManager mTimelineManager;
     private static final String LIVE_CARD_ID = "identify";
+    private Card mCard;
+    private final Context mContext = this;
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@Override
@@ -178,10 +178,10 @@ public class IdentifyActivity extends Activity {
         
         @Override
         protected void onPostExecute(String result) {
-        	System.out.println(result);
-        	Card card = new Card(null);
-        	card.setText(result);
-        	card.toView();
+  	        System.out.println(result);
+        	mCard.setText(result);
+        	View card_view = mCard.toView();
+  	        setContentView(card_view);
         }
     }
     
@@ -198,11 +198,14 @@ public class IdentifyActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.v("Identify", "ONCREATE");
 		bindService(new Intent(this, IdentifyService.class), mConnection, 0);
-		setContentView(R.layout.activity_menu);
+		//setContentView(R.layout.activity_menu);
 		// Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		// Log.d("TAKEAPIC", MediaStore.ACTION_IMAGE_CAPTURE);
 		// System.out.println(i);
 		// startActivityForResult(i, 0);
+	    mCard = new Card(this);
+
+		
 		take_a_pic();
 	}
 
