@@ -44,13 +44,15 @@ import com.google.android.glass.timeline.LiveCard;
 import com.google.android.glass.timeline.TimelineManager;
 
 public class IdentifyActivity extends Activity {
-	
-    private String mEncodedImage;
-    private LiveCard mLiveCard;
-    private TimelineManager mTimelineManager;
-    private static final String LIVE_CARD_ID = "identify";
-    private Card mCard;
-    private final Context mContext = this;
+
+	private String mEncodedImage;
+	private LiveCard mLiveCard;
+	private TimelineManager mTimelineManager;
+	private static final String LIVE_CARD_ID = "identify";
+	private Card mCard;
+	private Card mCard2;
+	private final Context mContext = this;
+	private TextView tv;
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@Override
@@ -62,59 +64,62 @@ public class IdentifyActivity extends Activity {
 			// Do nothing.
 		}
 	};
-	
-    private HttpResponse httpPost(String initURL, List<NameValuePair> nameValuePairs) {
-        HttpClient httpclient = new DefaultHttpClient();
-        try {
-                HttpPost httppost = new HttpPost(initURL);
-                UrlEncodedFormEntity uefe = new UrlEncodedFormEntity(nameValuePairs);
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpclient.execute(httppost);
-                return response;
 
-        } catch(Exception e) {
-                Log.d("Exception", e.toString());
-        }
-        return null;
-    }
+	private HttpResponse httpPost(String initURL,
+			List<NameValuePair> nameValuePairs) {
+		HttpClient httpclient = new DefaultHttpClient();
+		try {
+			HttpPost httppost = new HttpPost(initURL);
+			UrlEncodedFormEntity uefe = new UrlEncodedFormEntity(nameValuePairs);
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse response = httpclient.execute(httppost);
+			return response;
 
-    private HttpResponse httpGet(String initURL) {
-        HttpClient httpclient = new DefaultHttpClient();
-        try {
+		} catch (Exception e) {
+			Log.d("Exception", e.toString());
+		}
+		return null;
+	}
 
-            HttpGet httpGet = new HttpGet(initURL);
-            HttpResponse response = httpclient.execute(httpGet);
-            return response;
+	private HttpResponse httpGet(String initURL) {
+		HttpClient httpclient = new DefaultHttpClient();
+		try {
 
-        } catch(Exception e) {
-                Log.d("Exception", e.toString());
-        }
-        return null;
-    } 
-    
-    private void updater(String response) {
-    	System.out.println(response);
-    	//do something;
-    	return;
-    }
-    
+			HttpGet httpGet = new HttpGet(initURL);
+			HttpResponse response = httpclient.execute(httpGet);
+			return response;
 
-    private class ImageSender extends AsyncTask<Void, Void, String> {
-    	
-        @Override
-        public String doInBackground(Void... voids) {
-        	HttpClient httpclient = new DefaultHttpClient();
-        	HttpPost httppost = new HttpPost("http://54.201.41.99/process/recognize/");
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair("picture", mEncodedImage));
-            nameValuePairs.add(new BasicNameValuePair("user", "1234"));
-            try {
-				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+		} catch (Exception e) {
+			Log.d("Exception", e.toString());
+		}
+		return null;
+	}
+
+	private void updater(String response) {
+		System.out.println(response);
+		// do something;
+		return;
+	}
+
+	private class ImageSender extends AsyncTask<Void, Void, String> {
+
+		@Override
+		public String doInBackground(Void... voids) {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost(
+					"http://54.201.41.99/process/recognize/");
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+			nameValuePairs
+					.add(new BasicNameValuePair("picture", mEncodedImage));
+			nameValuePairs.add(new BasicNameValuePair("user", "1234"));
+			try {
+				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,
+						"UTF-8"));
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            HttpResponse response = null;
+			HttpResponse response = null;
 			try {
 				response = httpclient.execute(httppost);
 				System.out.println(response);
@@ -125,9 +130,9 @@ public class IdentifyActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                InputStream instream = null;
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				InputStream instream = null;
 				try {
 					instream = entity.getContent();
 				} catch (IllegalStateException e) {
@@ -137,54 +142,49 @@ public class IdentifyActivity extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-	            BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
-	            StringBuilder sb = new StringBuilder();
-	            String line = null;
-                try {
-                	System.out.println(entity);
-                	while ((line = reader.readLine()) != null) {
-                		sb.append((line + "\n"));
-                	}
-                } catch (IOException e) {
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(instream));
+				StringBuilder sb = new StringBuilder();
+				String line = null;
+				try {
+					System.out.println(entity);
+					while ((line = reader.readLine()) != null) {
+						sb.append((line + "\n"));
+					}
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} finally {
-                    try {
+					try {
 						instream.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-                }
-	            return sb.toString();
-            }
-            /*
-            HttpPost to_http = new HttpPost(initURL);
-            MultipartEntity entity = new MultipartEntity();
-           
-            
-            HttpEntity result = httpPost(initURL, nameValuePairs).getEntity();
-            try {
-				updater(EntityUtils.toString(result, "UTF-8"));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} */
-            return null;
-        }
-        
-        @Override
-        protected void onPostExecute(String result) {
-  	        System.out.println(result);
-        	mCard.setText(result);
-        	View card_view = mCard.toView();
-  	        setContentView(card_view);
-        }
-    }
-    
+				}
+				return sb.toString();
+			}
+			/*
+			 * HttpPost to_http = new HttpPost(initURL); MultipartEntity entity
+			 * = new MultipartEntity();
+			 * 
+			 * 
+			 * HttpEntity result = httpPost(initURL,
+			 * nameValuePairs).getEntity(); try {
+			 * updater(EntityUtils.toString(result, "UTF-8")); } catch
+			 * (ParseException e) { // TODO Auto-generated catch block
+			 * e.printStackTrace(); } catch (IOException e) { // TODO
+			 * Auto-generated catch block e.printStackTrace(); }
+			 */
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			System.out.println(result);
+			tv.setText(result);
+		}
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -198,14 +198,17 @@ public class IdentifyActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.v("Identify", "ONCREATE");
 		bindService(new Intent(this, IdentifyService.class), mConnection, 0);
-		//setContentView(R.layout.activity_menu);
+		// setContentView(R.layout.activity_menu);
 		// Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		// Log.d("TAKEAPIC", MediaStore.ACTION_IMAGE_CAPTURE);
 		// System.out.println(i);
 		// startActivityForResult(i, 0);
-	    mCard = new Card(this);
-
 		
+		setContentView(R.layout.activity_menu);
+
+		tv = (TextView) findViewById(R.id.name);
+		String joke1 = "Try this line!";
+		tv.setText(joke1);
 		take_a_pic();
 	}
 
@@ -221,6 +224,9 @@ public class IdentifyActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		String pickup = "Hey girl, Your DOM looks good from &#60;head&#62; to &#60;&#47;footer&#62;";
+		tv.setText(pickup);
+
 		if (requestCode == 0) {
 			if (resultCode == RESULT_OK) {
 				Bundle extras = data.getExtras();
@@ -237,13 +243,15 @@ public class IdentifyActivity extends Activity {
 						e.printStackTrace();
 					}
 				}
+
 				System.out.println("OMQ IT EXIZTS");
 				Bitmap img_bm = BitmapFactory.decodeFile(file_path);
 				System.out.println(img_bm);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				img_bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
 				byte[] image_arr = baos.toByteArray();
-				mEncodedImage = Base64.encodeToString(image_arr, Base64.DEFAULT);
+				mEncodedImage = Base64
+						.encodeToString(image_arr, Base64.DEFAULT);
 				ImageSender is = new ImageSender();
 				is.execute();
 			}
@@ -255,5 +263,6 @@ public class IdentifyActivity extends Activity {
 		Log.d("TAKEAPIC", MediaStore.ACTION_IMAGE_CAPTURE);
 		System.out.println(i);
 		startActivityForResult(i, 0);
+
 	}
 }

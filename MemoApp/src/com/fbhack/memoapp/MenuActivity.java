@@ -139,18 +139,19 @@ public class MenuActivity extends Activity {
 
 		@Override
 		public String doInBackground(String... strings) {
+			System.out.println("here");
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpPost httppost = new HttpPost(
 					//"http://www.google.com");
 		"http://54.201.41.99/process/memo.php");
 			String speech = strings[0];
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-			//nameValuePairs
-			//		.add(new BasicNameValuePair("picture1", mEncodedImage1));
-			//nameValuePairs
-			//		.add(new BasicNameValuePair("picture2", mEncodedImage2));
-			//nameValuePairs.add(new BasicNameValuePair("user", "1234"));
-			//nameValuePairs.add(new BasicNameValuePair("speech", speech));
+			nameValuePairs
+					.add(new BasicNameValuePair("picture1", mEncodedImage1));
+			nameValuePairs
+					.add(new BasicNameValuePair("picture2", mEncodedImage2));
+			nameValuePairs.add(new BasicNameValuePair("user", "1234"));
+			nameValuePairs.add(new BasicNameValuePair("speech", speech));
 			try {
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,
 						"UTF-8"));
