@@ -14,7 +14,7 @@ window.onload=function() {
     var crop = document.createElement('div');
     crop.setAttribute('class', 'crop');
     var img = document.createElement('img');
-    var url = obj[stack].pictures[0];
+    var url = obj[stack].pictures[1];
     img.setAttribute('src', "http://54.201.41.99"+url.substring(8, url.length ));
     crop.appendChild(img);
     var fn = document.createElement('h5');
@@ -25,6 +25,13 @@ window.onload=function() {
     fn.appendChild(nametext);
     stackstack.appendChild(crop);
     stackstack.appendChild(fn);
+    stackstack.setAttribute('transcript', obj[stack].transcript);
+    stackstack.onclick = function() {
+      document.getElementById('transcript-text').innerHTML=this.getAttribute('transcript');
+      document.getElementById('overlay').style.display='block';
+      document.getElementById('fade').style.display='block';
+    }
+
     stackrow.appendChild(stackstack);
   }
   document.getElementById('stacks').appendChild(stackrow);
