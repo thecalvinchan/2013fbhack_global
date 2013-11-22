@@ -182,7 +182,7 @@ public class IdentifyActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			System.out.println(result);
-			tv.setText(result);
+			tv.setText(result); 
 		}
 	}
 
@@ -192,7 +192,7 @@ public class IdentifyActivity extends Activity {
 		// getMenuInflater().inflate(R.menu.menu, menu);
 		return true;
 	}
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -205,10 +205,7 @@ public class IdentifyActivity extends Activity {
 		// startActivityForResult(i, 0);
 		
 		setContentView(R.layout.activity_menu);
-
 		tv = (TextView) findViewById(R.id.name);
-		String joke1 = "Try this line!";
-		tv.setText(joke1);
 		take_a_pic();
 	}
 
@@ -224,9 +221,6 @@ public class IdentifyActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		String pickup = "Hey girl, Your DOM looks good from &#60;head&#62; to &#60;&#47;footer&#62;";
-		tv.setText(pickup);
-
 		if (requestCode == 0) {
 			if (resultCode == RESULT_OK) {
 				Bundle extras = data.getExtras();
@@ -243,7 +237,6 @@ public class IdentifyActivity extends Activity {
 						e.printStackTrace();
 					}
 				}
-
 				System.out.println("OMQ IT EXIZTS");
 				Bitmap img_bm = BitmapFactory.decodeFile(file_path);
 				System.out.println(img_bm);
@@ -263,6 +256,5 @@ public class IdentifyActivity extends Activity {
 		Log.d("TAKEAPIC", MediaStore.ACTION_IMAGE_CAPTURE);
 		System.out.println(i);
 		startActivityForResult(i, 0);
-
 	}
 }
