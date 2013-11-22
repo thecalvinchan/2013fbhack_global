@@ -3,6 +3,21 @@ package com.fbhack.memoapp;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import com.google.android.glass.media.Camera;
 
@@ -12,6 +27,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
@@ -20,6 +36,8 @@ import android.util.Log;
 import android.view.Menu;
 
 public class IdentifyActivity extends Activity {
+	
+    private String mEncodedImage;
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@Override
@@ -31,6 +49,68 @@ public class IdentifyActivity extends Activity {
 			// Do nothing.
 		}
 	};
+	
+    private HttpResponse httpPost(String initURL, List<NameValuePair> nameValuePairs) {
+        HttpClient httpclient = new DefaultHttpClient();
+        try {
+                HttpPost httppost = new HttpPost(initURL);
+                UrlEncodedFormEntity uefe = new UrlEncodedFormEntity(nameValuePairs);
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                HttpResponse response = httpclient.execute(httppost);
+                return response;
+
+        } catch(Exception e) {
+                Log.d("Exception", e.toString());
+        }
+        return null;
+    }
+
+    private HttpResponse httpGet(String initURL) {
+        HttpClient httpclient = new DefaultHttpClient();
+        try {
+
+            HttpGet httpGet = new HttpGet(initURL);
+            HttpResponse response = httpclient.execute(httpGet);
+            return response;
+
+        } catch(Exception e) {
+                Log.d("Exception", e.toString());
+        }
+        return null;
+    } 
+    
+    private void updater(String response) {
+    	System.out.println(response);
+    	//do something;
+    	return;
+    }
+    
+    private class ImageSender extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        public Void doInBackground(Void... voids) {
+            String initURL = "http://54.201.41.99/process/recognize/";
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+            nameValuePairs.add(new BasicNameValuePair("picture", mEncodedImage));
+            nameValuePairs.add(new BasicNameValuePair("user", "1234"));
+            /*
+            HttpPost to_http = new HttpPost(initURL);
+            MultipartEntity entity = new MultipartEntity();
+            */
+            
+            HttpEntity result = httpPost(initURL, nameValuePairs).getEntity();
+            try {
+				updater(EntityUtils.toString(result, "UTF-8"));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            return null;
+        }
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,7 +166,9 @@ public class IdentifyActivity extends Activity {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				img_bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
 				byte[] image_arr = baos.toByteArray();
-				String image_str = Base64.encodeToString(image_arr, Base64.DEFAULT);
+				mEncodedImage = Base64.encodeToString(image_arr, Base64.DEFAULT);
+				ImageSender is = new ImageSender();
+				is.doInBackground();
 			}
 		}
 	}

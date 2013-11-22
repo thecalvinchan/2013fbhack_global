@@ -33,7 +33,6 @@ public class IdentifyService extends Service {
   private TimelineManager mTimelineManager;
   private LiveCard mLiveCard;
   private TextToSpeech mSpeech;
-  private String mEncodedImage;
   
   private IdentifyActivity ia;
 
@@ -77,60 +76,6 @@ public class IdentifyService extends Service {
        return super.onStartCommand(intent, flags, startId);
 	}
 	
-    private HttpResponse httpPost(String initURL, List<NameValuePair> nameValuePairs) {
-        HttpClient httpclient = new DefaultHttpClient();
-        try {
-                HttpPost httppost = new HttpPost(initURL);
-                UrlEncodedFormEntity uefe = new UrlEncodedFormEntity(nameValuePairs);
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpclient.execute(httppost);
-                return response;
-
-        } catch(Exception e) {
-                Log.d("Exception", e.toString());
-        }
-        return null;
-    }
-
-    private HttpResponse httpGet(String initURL) {
-        HttpClient httpclient = new DefaultHttpClient();
-        try {
-
-            HttpGet httpGet = new HttpGet(initURL);
-            HttpResponse response = httpclient.execute(httpGet);
-            return response;
-
-        } catch(Exception e) {
-                Log.d("Exception", e.toString());
-        }
-        return null;
-    } 
-    
-    private void updater(String response) {
-    	//do something;
-    	return;
-    }
-    
-    private class ImageSender extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        public Void doInBackground(Void... voids) {
-            String initURL = "http://54.201.41.99/process/memo.php";
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair("picture", mEncodedImage));
-            HttpEntity result = httpPost(initURL, nameValuePairs).getEntity();
-            try {
-				updater(EntityUtils.toString(result, "UTF-8"));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            return null;
-        }
-    }
 
 	@Override
 	public void onDestroy() {
