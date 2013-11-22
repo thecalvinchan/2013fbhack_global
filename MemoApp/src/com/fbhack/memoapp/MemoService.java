@@ -43,7 +43,11 @@ public class MemoService extends Service {
 
 			mLiveCard.publish();
 		}
-
+		
+		Intent i = new Intent(getBaseContext(), MenuActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		getApplication().startActivity(i);
+		
 		return START_STICKY;
 	}
 
