@@ -54,6 +54,8 @@ public final class R {
         /**  Menu item strings. 
          */
         public static final int read_aloud=0x7f070007;
+        public static final int remember_voice_prompt=0x7f07000a;
+        public static final int remember_voice_trigger=0x7f070009;
         public static final int show_compass_voice_trigger=0x7f070001;
         /**  Spoken strings. 
          */
@@ -65,6 +67,6 @@ public final class R {
         public static final int MenuTheme=0x7f090000;
     }
     public static final class xml {
-        public static final int compass_show=0x7f040000;
+        public static final int remember_voice_trigger=0x7f040000;
     }
 }

@@ -70,5 +70,7 @@
     <!-- Menu item strings. -->
     <string name="read_aloud">Read aloud</string>
     <string name="stop">Stop</string>
+    <string name="remember_voice_trigger">remember this person</string>
+    <string name="remember_voice_prompt">Ask \&quot;what is your name?\&quot;</string>
 
 </resources>
