@@ -1,69 +1,73 @@
 package com.fbhack.memoapp;
 
+import java.util.ArrayList;
+
 import android.app.Service;
-import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
+import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
+
 import com.google.android.glass.timeline.LiveCard;
 import com.google.android.glass.timeline.TimelineManager;
 
 public class MemoService extends Service {
 	private static final String LIVE_CARD_ID = "memo";
-	
+
 	private TimelineManager mTimelineManager;
-    private LiveCard mLiveCard;
-    private TextToSpeech mSpeech;
-    
-    @Override
-    public void onCreate() {
-    	super.onCreate();
-    	
-    	mTimelineManager = TimelineManager.from(this);
-    	
-    	mSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                // Do nothing.
-            }
-        });
-    }
-    
+	private LiveCard mLiveCard;
+	private TextToSpeech mSpeech;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		Log.v("MEMO", "SANITY");
+		mTimelineManager = TimelineManager.from(this);
+
+		mSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+			@Override
+			public void onInit(int status) {
+				// Do nothing.
+			}
+		});
+	}
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Binder();
 	}
-	
+
 	@Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (mLiveCard == null) {
-            mLiveCard = mTimelineManager.getLiveCard(LIVE_CARD_ID);
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		if (mLiveCard == null) {
+			mLiveCard = mTimelineManager.getLiveCard(LIVE_CARD_ID);
 
-            mLiveCard.setNonSilent(true);
+			mLiveCard.setNonSilent(true);
 
-            // Display the options menu when the live card is tapped.
-            Intent menuIntent = new Intent(this, MenuActivity.class);
-            menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            mLiveCard.setAction(PendingIntent.getActivity(this, 0, menuIntent, 0));
+			ArrayList<String> voiceResults = intent.getExtras()
+					.getStringArrayList(RecognizerIntent.EXTRA_RESULTS);
+			Log.v("Memo", "Stuff");
 
-            mLiveCard.publish();
-        }
+			mLiveCard.publish();
+		}
 
-        return START_STICKY;
-    }
-	
+		return START_STICKY;
+	}
+
 	@Override
-    public void onDestroy() {
-        if (mLiveCard != null && mLiveCard.isPublished()) {
-            mLiveCard.unpublish();
-            mLiveCard = null;
-        }
+	public void onDestroy() {
+		if (mLiveCard != null && mLiveCard.isPublished()) {
+			mLiveCard.unpublish();
+			mLiveCard = null;
+		}
 
-        mSpeech.shutdown();
+		mSpeech.shutdown();
 
-        mSpeech = null;
+		mSpeech = null;
 
-        super.onDestroy();
-    }
+		super.onDestroy();
+	}
 }
