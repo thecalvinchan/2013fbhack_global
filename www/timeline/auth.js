@@ -15,13 +15,11 @@ window.fbAsyncInit = function() {
         document.getElementById('header-title').innerHTML=txt;
       });
       FB.api('/me/picture?type=large', function(response) {
-        console.log(response);
         var i = document.createElement('img');
         i.src = response.data.url;
         document.getElementById('header-image').appendChild(i);  
       });
     } else {
-      console.log('failed');
       window.location = "../index.html";
     }
   });

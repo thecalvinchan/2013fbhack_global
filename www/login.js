@@ -11,7 +11,6 @@ window.fbAsyncInit = function() {
 function fb_login() {
   FB.login(function(response) {
     if (response.authResponse) {
-      console.log(response);
       access_token = response.authResponse.accessToken;
       user_id = response.authResponse.userID;
 
@@ -20,7 +19,6 @@ function fb_login() {
       });
       window.location = "./timeline/index.html";
     } else {
-      console.log('cancelled');
     }
   }, {
     scope: 'publish_stream, email'
