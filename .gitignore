@@ -2,3 +2,5 @@ Memo/bin/
 MemoApp/bin/
 MemoApp/.classpath
 MemoApp/gen/
+.DS_Store
+*.swp
