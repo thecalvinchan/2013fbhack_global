@@ -139,8 +139,10 @@ body {
   font-size: 15pt;
 }
 
-.stack-stack img {
-  clip: rect(0px, 150px, 150px, 0px);
+.crop {
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
 }
 
 .multiple {
@@ -157,5 +159,5 @@ body {
 }
 
 .multiple h5 {
-  top: 26px;
+  top: 31px;
 }
